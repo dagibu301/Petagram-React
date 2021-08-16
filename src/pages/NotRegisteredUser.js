@@ -1,16 +1,26 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Context from "../Context";
 import { UserForm } from "../components/UserForm";
+import { useRegisterMutation } from "../hooks/useRegisterMutation";
 
-export const NotRegisteredUser = () => (
-  <Context.Consumer>
-    {({ activateAuth }) => {
-      return (
-        <Fragment>
-          <UserForm title="Register" onSubmit={activateAuth} />
-          <UserForm title="Sign in" onSubmit={activateAuth} />
-        </Fragment>
-      );
-    }}
-  </Context.Consumer>
-);
+export const NotRegisteredUser = () => {
+  const { registerMutation } = useRegisterMutation();
+
+  return (
+    <Context.Consumer>
+      {({ activateAuth }) => {
+        const onSubmit = ({ email, password }) => {
+          const input = { email, password };
+          const variables = { input };
+          registerMutation({ variables }).then(activateAuth);
+        };
+        return (
+          <>
+            <UserForm onSubmit={onSubmit} title="Registrarse" />
+            <UserForm onSubmit={activateAuth} title="Iniciar Sesion" />
+          </>
+        );
+      }}
+    </Context.Consumer>
+  );
+};
