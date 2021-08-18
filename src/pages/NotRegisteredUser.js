@@ -25,7 +25,10 @@ export const NotRegisteredUser = () => {
           const input = { email, password };
           const variables = { input };
           registerMutation({ variables })
-            .then(activateAuth)
+            .then(({ data }) => {
+              const { signup } = data;
+              activateAuth(signup);
+            })
             .catch((err) => {
               console.log("El usuario ya existe o hay algún problema.");
             });
@@ -37,7 +40,10 @@ export const NotRegisteredUser = () => {
           const input = { email, password };
           const variables = { input };
           loginMutation({ variables })
-            .then(activateAuth)
+            .then(({ data }) => {
+              const { login } = data;
+              activateAuth(login);
+            })
             .catch((err) => {
               console.log(
                 "La contraseña no es correcta o el usuario no existe."
